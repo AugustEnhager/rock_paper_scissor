@@ -42,13 +42,13 @@ const App = () => {
     }
 
     if (userCounter == 5) {
-      setUserCounter((userCounter = 0))
-      setComputerCounter((computerCounter = 0))
-      return setEndResult("You've reached five points and won!")
-    } else if (computerCounter == 5) {
-      setComputerCounter((computerCounter = 0))
-      setUserCounter((userCounter = 0))
-      return setEndResult("The computer reached 5 points and you lost!")
+      return setEndResult("You've reached five points first and won!")
+    } else if (computerCounter == 5) {      
+      return setEndResult("The computer reached 5 points first and you lost!")
+    } else if (userCounter >= 5 || computerCounter >= 5) {
+      setUserCounter((userCounter - userCounter))
+      setComputerCounter((computerCounter - computerCounter))
+      return setEndResult(" ")
     }
   }, [userWeapon, computerWeapon])
 
@@ -83,8 +83,9 @@ const App = () => {
           className="weaponButton"
           data-cy={"resetButton"}
           onClick={() => {
-            setUserCounter((userCounter = 0))
-            setComputerCounter((computerCounter = 0))
+            setUserCounter((userCounter - userCounter))
+            setComputerCounter((computerCounter - computerCounter))
+            setEndResult(" ")
           }}
         >
           RESET
