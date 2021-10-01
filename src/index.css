@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.weaponButton {
+  border-radius: 15px;
+  background: #074885;
+  color: #ffffff;
+  font-size: larger;
+  padding: 20px;
+  width: 150px;
+  height: 75px;
+}

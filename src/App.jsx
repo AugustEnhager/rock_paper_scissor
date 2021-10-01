@@ -1,57 +1,97 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React from "react"
+import { useState, useEffect } from "react"
 
 const App = () => {
-  const [userChoice, setUserChoice] = useState(null);
-  const [computerChoice, setComputerChoice] = useState(null);
-  const [result, setResult] = useState(null);
-  const choices = ["rock", "paper", "scissors"];
+  const [userWeapon, setUserWeapon] = useState(null)
+  const [computerWeapon, setComputerWeapon] = useState(null)
+  const [result, setResult] = useState(null)
+  const [endResult, setEndResult] = useState(null)
+  const [userCounter, setUserCounter] = useState(0)
+  const [computerCounter, setComputerCounter] = useState(0)
+  const weapons = ["Rock", "Paper", "Scissors"]
 
-  const click = (choice) => {
-    setUserChoice(choice);
-    computerRandomChoice();
-  };
+  const click = (weapon) => {
+    setUserWeapon(weapon)
+    randomWeaponGenerator()
+  }
 
-  const computerRandomChoice = () => {
-    const randomChoice = choices[Math.floor(Math.random() * choices.length)];
-    setComputerChoice(randomChoice);
-  };
+  const randomWeaponGenerator = () => {
+    const randomWeapon = weapons[Math.floor(Math.random() * weapons.length)]
+    setComputerWeapon(randomWeapon)
+  }
 
-  useEffect(() => {       
-    switch(userChoice + computerChoice) {          
-      case "scissorpaper":
-      case "paperrock":
-      case "rockscissor":            
-        setResult("You Won!");
-        break;
-      case "paperscissor":
-      case "scissorrock":
-      case "rockpaper":
-        setResult("Computer Won!");
-        break;
-      case "rockrock":
-      case "paperpaper":
-      case "scissorscissor":
-        setResult("It is a draw! Try again!");
-        break;
-    }    
-  }, [userChoice, computerChoice]);
+  useEffect(() => {
+    switch (userWeapon + computerWeapon) {
+      case "ScissorPaper":
+      case "PaperRock":
+      case "RockScissor":
+        setResult("You Won!")
+        setUserCounter(userCounter + 1)
+        break
+      case "PaperScissor":
+      case "ScissorRock":
+      case "RockPaper":
+        setResult("Computer Won!")
+        setComputerCounter(computerCounter + 1)
+        break
+      case "RockRock":
+      case "PaperPaper":
+      case "ScissorScissor":
+        setResult("It is a draw! Try again!")
+        break
+    }
 
- 
+    if (userCounter == 5) {
+      setUserCounter((userCounter = 0))
+      setComputerCounter((computerCounter = 0))
+      return setEndResult("You've reached five points and won!")
+    } else if (computerCounter == 5) {
+      setComputerCounter((computerCounter = 0))
+      setUserCounter((userCounter = 0))
+      return setEndResult("The computer reached 5 points and you lost!")
+    }
+  }, [userWeapon, computerWeapon])
 
   return (
-    <div>
-      <h1>You chose: {userChoice}</h1>
-      
-      <h1>Computer chose: {computerChoice}</h1>
-      {choices.map((choice) => (
-        <button key={choice} onClick={() => click(choice)}>
-          {choice}
-        </button>
-      ))}
-      <h1>Result: {result}</h1>
-    </div>
-  );
-};
+    <>
+      <h1 data-cy="header">
+        Let's play Rock Paper Scissors, first who get 5 points win!
+      </h1>
+      <div>
+        <h1 data-cy="user">Your choice: {userWeapon}</h1>
 
-export default App;
+        <h1 data-cy="computer">Computers choice: {computerWeapon}</h1>
+        {weapons.map((value, index) => (
+          <button
+            className="weaponButton"
+            data-cy={"buttonNr: ${index}"}
+            key={index}
+            onClick={() => click(value)}
+          >
+            {value}
+          </button>
+        ))}
+        <h1 data-cy="results">
+          Result: {result}
+          <br />
+          Your points: {userCounter}
+          <br />
+          Computers points: {computerCounter}
+        </h1>
+        <h1>The end result: {endResult}</h1>
+        <button
+          className="weaponButton"
+          data-cy={"resetButton"}
+          onClick={() => {
+            setUserCounter((userCounter = 0))
+            setComputerCounter((computerCounter = 0))
+          }}
+        >
+          RESET
+        </button>
+      </div>
+    </>
+  )
+}
+
+export default App
