@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 const App = () => {
   const [userWeapon, setUserWeapon] = useState(null)
   const [computerWeapon, setComputerWeapon] = useState(null)
+  const [userScore, setUserScore] = useState(0)
+  const [computerScore, setComputerScore] = useState(0)
   const [result, setResult] = useState(null)
   const [endResult, setEndResult] = useState(null)
   const [userCounter, setUserCounter] = useState(0)
@@ -22,30 +24,34 @@ const App = () => {
 
   useEffect(() => {
     switch (userWeapon + computerWeapon) {
-      case "ScissorPaper":
+      case "ScissorsPaper":
       case "PaperRock":
-      case "RockScissor":
+      case "RockScissors":
         setResult("You Won!")
         setUserCounter(userCounter + 1)
         break
-      case "PaperScissor":
-      case "ScissorRock":
+      case "PaperScissors":
+      case "ScissorsRock":
       case "RockPaper":
         setResult("Computer Won!")
         setComputerCounter(computerCounter + 1)
         break
       case "RockRock":
       case "PaperPaper":
-      case "ScissorScissor":
+      case "ScissorsScissors":
         setResult("It is a draw! Try again!")
         break
     }
 
     if (userCounter == 5) {
-      return setEndResult("You've reached five points first and won!")
-    } else if (computerCounter == 5) {      
+      setUserScore(userScore + 1)
+      setUserCounter(userCounter + 1)
+      return setEndResult("You've reached 5 points first and won!")
+    } else if (computerCounter == 5) {
+      setComputerCounter(computerCounter + 1 )
+      setComputerScore(computerScore + 1)  
       return setEndResult("The computer reached 5 points first and you lost!")
-    } else if (userCounter >= 5 || computerCounter >= 5) {
+    } else if (userCounter >= 6 || computerCounter >= 6) {
       setUserCounter((userCounter - userCounter))
       setComputerCounter((computerCounter - computerCounter))
       return setEndResult(" ")
@@ -88,9 +94,25 @@ const App = () => {
             setEndResult(" ")
           }}
         >
-          RESET
+          RESET POINTS
         </button>
-      </div>
+        <h1 data-cy="score">
+          Your score: {userScore}
+          <br />
+          Computer score: {computerScore}
+          </h1>
+          <button
+          className="weaponButton"
+          data-cy={"resetButton"}
+          onClick={() => {
+            setUserScore((userScore - userScore))
+            setComputerScore((computerScore - computerScore))
+            setEndResult(" ")
+          }}
+        >
+          RESET SCORE
+        </button>
+      </div>      
     </>
   )
 }
